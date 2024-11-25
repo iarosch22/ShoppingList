@@ -16,6 +16,9 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
             notifyDataSetChanged()
         }
 
+    var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
+
+    var onShopItemClickListener: ((ShopItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val layout = when (viewType) {
@@ -43,7 +46,12 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
         val shopItem = shopList[position]
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnLongClickListener{
+            onShopItemLongClickListener?.invoke(shopItem)
+            true
+        }
+        holder.itemView.setOnClickListener {
+            onShopItemClickListener?.invoke(shopItem)
             true
         }
     }
